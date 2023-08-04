@@ -1,6 +1,9 @@
 package com.aquilamazzei.springhunter.entities;
 
+import com.aquilamazzei.springhunter.consts.ClassNames;
+import com.aquilamazzei.springhunter.consts.WeaponType;
 import com.aquilamazzei.springhunter.consts.Weapons;
+import com.aquilamazzei.springhunter.logics.Dice;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,7 +46,19 @@ public class Hero extends Peon implements Serializable {
     }
 
     public void equipWeapon(Weapon weapon, Hero hero){
-        this.setDamage(weapon.getDamage());
-        System.out.println(weapon);
+        ClassNames ownerClass = (ClassNames) hero.getHeroClass().getClassName();
+
+        Double luckBonus = Weapon.insertBonus(weapon, hero);
+        Double newWeaponDamage = (weapon.getDamage()) + (weapon.getDamage() * luckBonus);
+
+        Double specBonus = Weapon.insertBonus(weapon, hero);
+
+        if(ownerClass == ClassNames.BARBARIAN && weapon.getType() == WeaponType.AXE) {newWeaponDamage += specBonus;}
+        if(ownerClass == ClassNames.SOLDIER && weapon.getType() == WeaponType.SWORD) {newWeaponDamage += specBonus;}
+        if(ownerClass == ClassNames.BASTION && weapon.getType() == WeaponType.SHIELD) {newWeaponDamage += specBonus;}
+        if(ownerClass == ClassNames.TREASURE_HUNTER && weapon.getType() == WeaponType.PISTOL) {newWeaponDamage += specBonus;}
+        if(ownerClass == ClassNames.SCRAPPER) {newWeaponDamage += specBonus * 0.8;}
+
+        if(newWeaponDamage > hero.getDamage()) {hero.setDamage(newWeaponDamage);}
     }
 }

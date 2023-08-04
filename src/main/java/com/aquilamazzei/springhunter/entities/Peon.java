@@ -62,9 +62,9 @@ public class Peon {
          int diceChooseItem = Dice.rollD20() + Dice.rollD20();
         if (diceChooseItem == 40) {
             indexItem = weapons.weaponsList.get(diceType).size() - 1;
-            hero.equipWeapon(weapons.weaponsList.get(diceType).get(indexItem));
+            hero.equipWeapon(weapons.weaponsList.get(diceType).get(indexItem), hero);
         }else {
-            hero.equipWeapon(Weapon.selectItemFromList(weapons.weaponsList.get(diceType), Dice.rollDouble()));
+            hero.equipWeapon(Weapon.selectItemFromList(weapons.weaponsList.get(diceType), Dice.rollDouble()), hero);
         }
 
         if(Dice.rollD20() >= hero.getLuck()){}
