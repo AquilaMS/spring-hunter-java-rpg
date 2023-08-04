@@ -1,7 +1,7 @@
 package com.aquilamazzei.springhunter.entities;
 
-import com.aquilamazzei.springhunter.consts.QualityTypes;
-import com.aquilamazzei.springhunter.consts.WeaponType;
+import com.aquilamazzei.springhunter.utils.enums.QualityTypes;
+import com.aquilamazzei.springhunter.utils.enums.WeaponType;
 import com.aquilamazzei.springhunter.logics.Dice;
 import jakarta.persistence.*;
 import lombok.Data;

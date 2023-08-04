@@ -1,7 +1,7 @@
-package com.aquilamazzei.springhunter.consts;
+package com.aquilamazzei.springhunter.utils;
 
+import com.aquilamazzei.springhunter.utils.enums.ClassNames;
 import com.aquilamazzei.springhunter.entities.HeroClass;
-import com.aquilamazzei.springhunter.entities.Weapon;
 
 import java.util.ArrayList;
 import java.util.List;

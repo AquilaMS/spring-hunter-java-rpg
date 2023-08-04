@@ -1,8 +1,7 @@
 package com.aquilamazzei.springhunter.entities;
 
-import com.aquilamazzei.springhunter.consts.Monsters;
-import com.aquilamazzei.springhunter.consts.WeaponType;
-import com.aquilamazzei.springhunter.consts.Arsenal;
+import com.aquilamazzei.springhunter.utils.Monsters;
+import com.aquilamazzei.springhunter.utils.Arsenal;
 import com.aquilamazzei.springhunter.logics.Dice;
 import jakarta.persistence.*;
 import lombok.Data;

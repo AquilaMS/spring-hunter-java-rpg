@@ -1,9 +1,9 @@
-package com.aquilamazzei.springhunter.consts;
+package com.aquilamazzei.springhunter.utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.aquilamazzei.springhunter.entities.Type;
+import com.aquilamazzei.springhunter.utils.enums.WeaponType;
 import com.aquilamazzei.springhunter.entities.Weapon;
 
 public class Arsenal {

@@ -1,10 +1,11 @@
 package com.aquilamazzei.springhunter.entities;
 
-import com.aquilamazzei.springhunter.consts.ClassNames;
-import com.aquilamazzei.springhunter.consts.WeaponType;
+import com.aquilamazzei.springhunter.utils.enums.ClassNames;
+import com.aquilamazzei.springhunter.utils.enums.WeaponType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 
@@ -56,7 +57,9 @@ public class Hero extends Peon implements Serializable {
 
         if(ownerClass == ClassNames.SCRAPPER) {newWeaponDamage += specBonus * 0.8;}
         if(newWeaponDamage > getDamage()) {setDamage(newWeaponDamage);}
-        System.out.println(getDamage());
+
+        setWeapon(weapon);
+        System.out.println(getWeapon());
     }
 
     public void passLevel(){
@@ -64,8 +67,6 @@ public class Hero extends Peon implements Serializable {
         setLife(getLife() + 50);
         setDamage(getDamage() + 1.0);
         setDefense(getDefense() + 1.0);
-
-        //System.out.println("VIDA HERO: " + getLife());
 
         ClassNames ownerClass = getHeroClass().getClassName();
         switch (ownerClass){

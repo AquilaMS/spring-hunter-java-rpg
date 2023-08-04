@@ -1,4 +1,4 @@
-package com.aquilamazzei.springhunter.consts;
+package com.aquilamazzei.springhunter.utils.enums;
 
 public enum ClassNames {
     BARBARIAN,

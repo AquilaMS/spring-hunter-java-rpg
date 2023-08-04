@@ -1,4 +1,4 @@
-package com.aquilamazzei.springhunter.consts;
+package com.aquilamazzei.springhunter.utils;
 
 import com.aquilamazzei.springhunter.entities.Monster;
 

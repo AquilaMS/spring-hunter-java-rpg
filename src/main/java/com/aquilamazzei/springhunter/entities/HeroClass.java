@@ -1,12 +1,8 @@
 package com.aquilamazzei.springhunter.entities;
 
-import com.aquilamazzei.springhunter.consts.ClassNames;
-import jakarta.annotation.Nullable;
+import com.aquilamazzei.springhunter.utils.enums.ClassNames;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 @Data
 @Entity
