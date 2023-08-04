@@ -21,14 +21,12 @@ public class HeroClass {
     private Double damage;
     private Double defense;
     private Double luck;
-    private Double specBonus;
 
-    public HeroClass(ClassNames className, Double life, Double damage, Double defense, Double luck, Double specBonus) {
+    public HeroClass(ClassNames className, Double life, Double damage, Double defense, Double luck) {
         this.className = className;
         this.life = life;
         this.damage = damage;
         this.defense = defense;
         this.luck = luck;
-        this.specBonus = specBonus;
     }
 }

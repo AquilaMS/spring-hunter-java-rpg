@@ -2,12 +2,9 @@ package com.aquilamazzei.springhunter.entities;
 
 import com.aquilamazzei.springhunter.consts.ClassNames;
 import com.aquilamazzei.springhunter.consts.WeaponType;
-import com.aquilamazzei.springhunter.consts.Weapons;
-import com.aquilamazzei.springhunter.logics.Dice;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 
 import java.io.Serializable;
 
@@ -34,7 +31,7 @@ public class Hero extends Peon implements Serializable {
 
     private Double luck;
 
-    public Hero(Player player, HeroClass heroClass,  String name) {
+    public Hero(Player player, HeroClass heroClass, String name) {
         this.player = player;
         this.heroClass = heroClass;
         this.luck = heroClass.getLuck();
@@ -45,20 +42,50 @@ public class Hero extends Peon implements Serializable {
         setName(name);
     }
 
-    public void equipWeapon(Weapon weapon, Hero hero){
-        ClassNames ownerClass = (ClassNames) hero.getHeroClass().getClassName();
-
-        Double luckBonus = Weapon.insertBonus(weapon, hero);
+    public void equipWeapon(Weapon weapon){
+        ClassNames ownerClass = this.getHeroClass().getClassName();
+        Double luckBonus = Weapon.insertBonus(weapon, this);
         Double newWeaponDamage = (weapon.getDamage()) + (weapon.getDamage() * luckBonus);
 
-        Double specBonus = Weapon.insertBonus(weapon, hero);
+        Double specBonus = Weapon.insertBonus(weapon, this);
 
         if(ownerClass == ClassNames.BARBARIAN && weapon.getType() == WeaponType.AXE) {newWeaponDamage += specBonus;}
-        if(ownerClass == ClassNames.SOLDIER && weapon.getType() == WeaponType.SWORD) {newWeaponDamage += specBonus;}
-        if(ownerClass == ClassNames.BASTION && weapon.getType() == WeaponType.SHIELD) {newWeaponDamage += specBonus;}
-        if(ownerClass == ClassNames.TREASURE_HUNTER && weapon.getType() == WeaponType.PISTOL) {newWeaponDamage += specBonus;}
-        if(ownerClass == ClassNames.SCRAPPER) {newWeaponDamage += specBonus * 0.8;}
+        else if(ownerClass == ClassNames.SOLDIER && weapon.getType() == WeaponType.SWORD) {newWeaponDamage += specBonus;}
+        else if(ownerClass == ClassNames.BASTION && weapon.getType() == WeaponType.SHIELD) {newWeaponDamage += specBonus;}
+        else if(ownerClass == ClassNames.TREASURE_HUNTER && weapon.getType() == WeaponType.PISTOL) {newWeaponDamage += specBonus;}
 
-        if(newWeaponDamage > hero.getDamage()) {hero.setDamage(newWeaponDamage);}
+        if(ownerClass == ClassNames.SCRAPPER) {newWeaponDamage += specBonus * 0.8;}
+        if(newWeaponDamage > getDamage()) {setDamage(newWeaponDamage);}
+    }
+
+    public void passLevel(){
+        setLevel(getLevel() + 1);
+        setLife(getLife() + 50);
+        setDamage(getDamage() + 1.0);
+        setDefense(getDefense() + 1.0);
+
+        ClassNames ownerClass = getHeroClass().getClassName();
+        switch (ownerClass){
+            case BARBARIAN -> setLife(getLife() + (getLife() * 0.05));
+            case SOLDIER -> setLife(getDamage() + (getDamage() * 0.05));
+            case BASTION -> setLife(getDefense() + (getDefense() * 0.07));
+            case TREASURE_HUNTER -> {
+                setLife(getLife() + (getLife()*0.035));
+                setDamage(getDamage() + (getDamage()*0.035));}
+            case SCRAPPER -> {
+                setLife(getLife() + (getLife()*0.03));
+                setDefense(getDefense() + (getDefense()*0.03));
+                setDamage(getDamage() + (getDamage()*0.03));
+            }
+        }
+    }
+
+    public void giveExp(Double exp) {
+        Double needToNextLevel = 100 + (getLevel() * 50.0);
+        setExperience(getExperience() + exp);
+        if (getExperience() >= needToNextLevel) {
+            passLevel();
+            setExperience(getExperience() - needToNextLevel);
+        }
     }
 }

@@ -33,7 +33,6 @@ public class Weapon {
         this.type = type;
         this.name = name;
         this.damage = (damage + (damage * gotQuality.ordinal() * 0.15))+(Dice.rollD20()/10)*damage;
-        System.out.println("got quality " + gotQuality.ordinal());
         this.spec_bonus = spec_bonus;
         this.quality = gotQuality;
         this.rarity = rarity;
@@ -59,7 +58,6 @@ public class Weapon {
         for(Weapon item : list){
             sumRarity += item.getRarity();
             if (dice <= sumRarity){
-                System.out.println(item.getQuality().ordinal());
                 return item;
             }
         }

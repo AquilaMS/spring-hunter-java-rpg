@@ -6,7 +6,7 @@ import java.util.List;
 import com.aquilamazzei.springhunter.entities.Type;
 import com.aquilamazzei.springhunter.entities.Weapon;
 
-public class Weapons {
+public class Arsenal {
 
     public List<Weapon> swordList = new ArrayList<>();
     public List<Weapon> shieldList = new ArrayList<>();
@@ -15,9 +15,7 @@ public class Weapons {
 
     public List<List<Weapon>> weaponsList = new ArrayList<>();
 
-    public List<Type> typeList = new ArrayList<>();
-
-    public Weapons(){
+    public Arsenal(){
         swordList.add(new Weapon(WeaponType.SWORD,"Wood Sword",1.0,0.0,0.30));
         swordList.add(new Weapon(WeaponType.SWORD,"Improvised Sword",1.0,0.0,0.17));
         swordList.add(new Weapon(WeaponType.SWORD,"Dull Blade",1.0,2.0,0.15));
@@ -59,5 +57,4 @@ public class Weapons {
         weaponsList.add(axeList);
         weaponsList.add(pistolList);
     }
-
 }
