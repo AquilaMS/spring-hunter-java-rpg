@@ -42,8 +42,7 @@ public class Hero extends Peon implements Serializable {
         setName(name);
     }
 
-    public void equipWeapon(Weapon weapon){
-        //TODO: terminar o equip de item com Spec
+    public void equipWeapon(Weapon weapon, Hero hero){
         this.setDamage(weapon.getDamage());
         System.out.println(weapon);
     }

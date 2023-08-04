@@ -57,17 +57,7 @@ public class Peon {
         }
         int diceItem = Dice.rollCustom(100);
         int indexItem = 0;
-/*
-        if (diceItem >= 98) {indexItem = 7;}
-        if (diceItem >= 95 && diceItem < 98) {indexItem = 6;}
-        if (diceItem >= 90 && diceItem < 95) {indexItem = 5;}
-        if (diceItem >= 83 && diceItem < 90) {indexItem = 4;}
-        if (diceItem >= 68 && diceItem < 83) {indexItem = 3;}
-        if (diceItem >= 51 && diceItem < 68) {indexItem = 2;}
-        if (diceItem >= 43 && diceItem < 51) {indexItem = 1;}
-        if (diceItem >= 18 && diceItem < 43) {indexItem = 0;}
 
-*/
         Weapons weapons = new Weapons();
          int diceChooseItem = Dice.rollD20() + Dice.rollD20();
         if (diceChooseItem == 40) {
@@ -77,15 +67,7 @@ public class Peon {
             hero.equipWeapon(Weapon.selectItemFromList(weapons.weaponsList.get(diceType), Dice.rollDouble()));
         }
 
-        if(Dice.rollD20() >= hero.getLuck());
-
-
-        //Weapon gotWeapon = weapons.weaponsList.get(diceType).get(indexItem);
-
-        //System.out.println(gotWeapon);
-        //System.out.println(indexItem);
-       // System.out.println(Weapon.createQuality());
-
+        if(Dice.rollD20() >= hero.getLuck()){}
 
     }
 }

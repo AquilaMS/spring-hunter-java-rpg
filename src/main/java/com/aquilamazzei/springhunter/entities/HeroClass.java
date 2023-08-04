@@ -1,5 +1,6 @@
 package com.aquilamazzei.springhunter.entities;
 
+import com.aquilamazzei.springhunter.consts.ClassNames;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,14 +16,14 @@ public class HeroClass {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String className;
+    private ClassNames className;
     private Double life;
     private Double damage;
     private Double defense;
     private Double luck;
     private Double specBonus;
 
-    public HeroClass(String className, Double life, Double damage, Double defense, Double luck, Double specBonus) {
+    public HeroClass(ClassNames className, Double life, Double damage, Double defense, Double luck, Double specBonus) {
         this.className = className;
         this.life = life;
         this.damage = damage;

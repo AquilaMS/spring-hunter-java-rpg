@@ -45,6 +45,7 @@ public class Weapon {
             case 1 -> {return QualityTypes.TRASH;}
             case 20 -> {return QualityTypes.UNIQUE;}
         }
+
         if(diceRoll > 1 && diceRoll <= 5){return QualityTypes.COMMON;}
         if(diceRoll > 6 && diceRoll <= 10){return QualityTypes.RARE;}
         if(diceRoll > 11 && diceRoll <= 15){return QualityTypes.MASTERCRAFTED;}
