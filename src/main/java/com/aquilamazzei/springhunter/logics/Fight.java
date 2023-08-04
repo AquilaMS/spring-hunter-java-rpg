@@ -11,11 +11,11 @@ public class Fight {
 
         do {
             Dice dice1 = new Dice();
-            Integer rollResultToTarget = dice1.roll();
+            Integer rollResultToTarget = dice1.rollD20();
             Double damageToTarget = (((attacker.getDamage()) * attacker.getLevel())/(target.getLevel() * target.getDefense())*(rollResultToTarget)) * 0.55;
 
             Dice dice2 = new Dice();
-            Integer rollResultToAttacker = dice2.roll();
+            Integer rollResultToAttacker = dice2.rollD20();
             Double damageToAttacker = (((target.getDamage()) * target.getLevel())/(attacker.getLevel() * attacker.getDefense())*(rollResultToAttacker)) * 0.5;
 
             target.setLife(target.getLife() - damageToTarget);

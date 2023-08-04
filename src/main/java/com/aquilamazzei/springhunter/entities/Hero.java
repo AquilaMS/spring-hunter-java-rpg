@@ -1,5 +1,6 @@
 package com.aquilamazzei.springhunter.entities;
 
+import com.aquilamazzei.springhunter.consts.Weapons;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,14 +29,22 @@ public class Hero extends Peon implements Serializable {
     @JoinColumn(name = "weapon_id")
     private Weapon weapon;
 
-    public Hero(Player player, HeroClass heroClass, Weapon weapon, String name) {
+    private Double luck;
+
+    public Hero(Player player, HeroClass heroClass,  String name) {
         this.player = player;
         this.heroClass = heroClass;
-        this.weapon = weapon;
+        this.luck = heroClass.getLuck();
 
         setLife(heroClass.getLife());
-        setDamage(heroClass.getDamage() + weapon.getDamage());
+        setDamage(heroClass.getDamage());
         setDefense(heroClass.getDefense());
         setName(name);
+    }
+
+    public void equipWeapon(Weapon weapon){
+        //TODO: terminar o equip de item com Spec
+        this.setDamage(weapon.getDamage());
+        System.out.println(weapon);
     }
 }
