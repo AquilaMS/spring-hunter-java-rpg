@@ -6,10 +6,9 @@ import com.aquilamazzei.springhunter.entities.Peon;
 
 public class Fight {
 
-
-
-    public void attack(Hero attacker, Peon target){
-
+    public static void attack(Hero attacker){
+        Monster target = Monster.chooseMonster(attacker);
+        System.out.println(target.getName());
         do {
             Integer rollResultToTarget = Dice.rollD20();
             Double damageToTarget = (((attacker.getDamage()) * attacker.getLevel())/(target.getLevel() * target.getDefense())*(rollResultToTarget)) * 0.55;
@@ -22,11 +21,15 @@ public class Fight {
 
             if (target.getLife() <= 0){
                 target.die();
-                Monster monster = (Monster) target;
-                attacker.giveExp(monster.getDropExp());
+                Monster.dropWeapon(attacker);
+
+                attacker.giveExp((target.getDropExp()));
             }
             if (attacker.getLife() <= 0) {attacker.die();}
 
         }while (target.getLife() > 0 && attacker.getLife()> 0);
+
+            System.out.println("monster life "+target.getLife());
+            System.out.println("hero life " +attacker.getLife());
     }
 }

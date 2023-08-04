@@ -25,5 +25,4 @@ public class Peon {
         System.out.println(getName() + ": " + "DIED");
     }
 
-
 }

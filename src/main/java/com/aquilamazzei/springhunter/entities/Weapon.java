@@ -61,7 +61,6 @@ public class Weapon {
                 return item;
             }
         }
-
         return list.get(0);
     }
 

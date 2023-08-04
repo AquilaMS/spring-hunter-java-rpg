@@ -56,6 +56,7 @@ public class Hero extends Peon implements Serializable {
 
         if(ownerClass == ClassNames.SCRAPPER) {newWeaponDamage += specBonus * 0.8;}
         if(newWeaponDamage > getDamage()) {setDamage(newWeaponDamage);}
+        System.out.println(getDamage());
     }
 
     public void passLevel(){
@@ -64,18 +65,20 @@ public class Hero extends Peon implements Serializable {
         setDamage(getDamage() + 1.0);
         setDefense(getDefense() + 1.0);
 
+        //System.out.println("VIDA HERO: " + getLife());
+
         ClassNames ownerClass = getHeroClass().getClassName();
         switch (ownerClass){
             case BARBARIAN -> setLife(getLife() + (getLife() * 0.05));
             case SOLDIER -> setLife(getDamage() + (getDamage() * 0.05));
             case BASTION -> setLife(getDefense() + (getDefense() * 0.07));
             case TREASURE_HUNTER -> {
-                setLife(getLife() + (getLife()*0.035));
-                setDamage(getDamage() + (getDamage()*0.035));}
+                setLife(getLife() + (getLife() * 0.035));
+                setDamage(getDamage() + (getDamage() * 0.035));}
             case SCRAPPER -> {
-                setLife(getLife() + (getLife()*0.03));
-                setDefense(getDefense() + (getDefense()*0.03));
-                setDamage(getDamage() + (getDamage()*0.03));
+                setLife(getLife() + (getLife() * 0.03));
+                setDefense(getDefense() + (getDefense() * 0.03));
+                setDamage(getDamage() + (getDamage() * 0.03));
             }
         }
     }

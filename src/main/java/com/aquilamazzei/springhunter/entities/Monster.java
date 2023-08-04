@@ -1,5 +1,6 @@
 package com.aquilamazzei.springhunter.entities;
 
+import com.aquilamazzei.springhunter.consts.Monsters;
 import com.aquilamazzei.springhunter.consts.WeaponType;
 import com.aquilamazzei.springhunter.consts.Arsenal;
 import com.aquilamazzei.springhunter.logics.Dice;
@@ -9,6 +10,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -41,11 +45,35 @@ public class Monster extends Peon implements Serializable{
         int diceChooseItem = Dice.rollD20() + Dice.rollD20();
         if (diceChooseItem == 40) {
             indexItem = arsenal.weaponsList.get(diceType).size() - 1;
-             hero.equipWeapon(arsenal.weaponsList.get(diceType).get(indexItem));
+            hero.equipWeapon(arsenal.weaponsList.get(diceType).get(indexItem));
         }else {
             hero.equipWeapon(Weapon.selectItemFromList(arsenal.weaponsList.get(diceType), Dice.rollDouble()));
         }
     }
 
+    private static Monster updateMonsterStatsByLevel(Monster monster, Integer level){
+        monster.setDamage(monster.getDamage() + (monster.getDamage() * 0.5));
+        monster.setLife(monster.getLife() + (monster.getLife() * 0.15));
+        monster.setDefense(monster.getDefense() + (monster.getDefense() * 0.15));
+        monster.setDropExp(monster.getDropExp() + (monster.getDropExp() * 0.20));
 
+        return monster;
+    }
+
+    public static Monster chooseMonster(Hero hero){
+        Random random = new Random();
+        List<Monster> tempMonsterList  = new ArrayList<>();
+        Monsters monsters = new Monsters();
+
+        for(Monster creature : monsters.monstersList){
+
+            if(hero.getLevel() < creature.getLevel() + 3 && hero.getLevel() > creature.getLevel() - 3){
+                tempMonsterList.add(creature);
+            }
+        }
+
+        Monster gotMonster = tempMonsterList.get(random.nextInt(tempMonsterList.size()));
+
+        return updateMonsterStatsByLevel(gotMonster, hero.getLevel());
+    }
 }

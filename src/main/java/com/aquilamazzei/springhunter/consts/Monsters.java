@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Monsters {
 
-    List<Monster> monstersList = new ArrayList<>();
+    public List<Monster> monstersList = new ArrayList<>();
 
     public Monsters(){
         monstersList.add(new Monster("Slime",10.0,0.0, 1, 1.0,20));
