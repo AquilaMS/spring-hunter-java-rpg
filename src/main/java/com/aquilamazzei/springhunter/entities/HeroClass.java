@@ -1,8 +1,11 @@
 package com.aquilamazzei.springhunter.entities;
 
+import com.aquilamazzei.springhunter.utils.Choices;
+import com.aquilamazzei.springhunter.utils.enums.ChoicesOptions;
 import com.aquilamazzei.springhunter.utils.enums.ClassNames;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Data
 @Entity

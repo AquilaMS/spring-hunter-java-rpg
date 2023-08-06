@@ -56,10 +56,11 @@ public class Hero extends Peon implements Serializable {
         else if(ownerClass == ClassNames.TREASURE_HUNTER && weapon.getType() == WeaponType.PISTOL) {newWeaponDamage += specBonus;}
 
         if(ownerClass == ClassNames.SCRAPPER) {newWeaponDamage += specBonus * 0.8;}
-        if(newWeaponDamage > getDamage()) {setDamage(newWeaponDamage);}
+        if(newWeaponDamage > getDamage()) {setDamage(newWeaponDamage); setWeapon(weapon);}
 
-        setWeapon(weapon);
-        System.out.println(getWeapon());
+        //TODO: checar se ha bug com
+
+        System.out.println("get weapon "+ getWeapon());
     }
 
     public void passLevel(){

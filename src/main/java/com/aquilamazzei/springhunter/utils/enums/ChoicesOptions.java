@@ -11,5 +11,4 @@ public enum ChoicesOptions {
     LOSS_LIFE_EARN_DAMAGE,
     FIGHT,
     DROP_WEAPON,
-
 }
