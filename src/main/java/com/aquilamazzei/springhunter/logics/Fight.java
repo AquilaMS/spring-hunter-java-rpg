@@ -2,7 +2,6 @@ package com.aquilamazzei.springhunter.logics;
 
 import com.aquilamazzei.springhunter.entities.Hero;
 import com.aquilamazzei.springhunter.entities.Monster;
-import com.aquilamazzei.springhunter.entities.Peon;
 
 public class Fight {
 
@@ -21,7 +20,7 @@ public class Fight {
 
             if (target.getLife() <= 0){
                 target.die();
-                Monster.dropWeapon(attacker);
+                Monster.dropWeaponTo(attacker);
 
                 attacker.giveExp((target.getDropExp()));
             }

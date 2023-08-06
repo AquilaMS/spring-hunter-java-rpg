@@ -35,7 +35,7 @@ public class Monster extends Peon implements Serializable{
         setDropExp(dropExp);
     }
 
-    public static void dropWeapon(Hero hero) {
+    public static void dropWeaponTo(Hero hero) {
         int diceType = Dice.rollCustom(4);
         int indexItem = 0;
 

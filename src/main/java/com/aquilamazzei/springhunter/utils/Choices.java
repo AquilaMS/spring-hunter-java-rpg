@@ -2,25 +2,19 @@ package com.aquilamazzei.springhunter.utils;
 
 import com.aquilamazzei.springhunter.entities.Hero;
 import com.aquilamazzei.springhunter.entities.Monster;
-import com.aquilamazzei.springhunter.entities.Weapon;
 import com.aquilamazzei.springhunter.logics.Dice;
 import com.aquilamazzei.springhunter.logics.Fight;
 import com.aquilamazzei.springhunter.utils.enums.ChoicesOptions;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Data
 public class Choices {
-    @Data
-    class Messager{
-        private String message1;
-        private String message2;
-    }
+
 
     private String title;
     private String description;
@@ -29,6 +23,7 @@ public class Choices {
     public ChoicesOptions generatedOption;
 
     public Choices() {
+
 
         List<ChoicesOptions> tempOptionsList = new ArrayList<>();
         tempOptionsList.addAll(Arrays.asList(ChoicesOptions.values()));
@@ -69,61 +64,83 @@ public class Choices {
             }
             case DROP_WEAPON-> {
                 this.title = "Search the Scrap Pile";
-                this.description = "Drop a weapon";
+                this.description = "Drop a Weapon";
             }
         }
     }
 
-    
-    public void chosenOption(Hero hero){
-        switch (getGeneratedOption()){
-            case EARN_LIFE -> {earnLife(hero);}
-            case EARN_DEFENSE -> {earnDefense(hero);}
-            case EARN_LUCK -> {earnLuck(hero);}
-            case EARN_DAMAGE -> {earnDamage(hero);}
-            case EARN_EXPERIENCE -> {earnExperience(hero);}
-            case LOSS_LIFE_EARN_DEFENSE -> {lossLifeEarnDefense(hero);}
-            case LOSS_LIFE_EARN_DAMAGE -> {lossLifeEarnDamage(hero);}
-            case FIGHT -> {fight(hero);}
-            case DROP_WEAPON -> {dropWeapon(hero);}
+    public static String chosenOption(Hero hero, ChoicesOptions choice){
+        switch (choice){
+            case EARN_LIFE -> {return earnLife(hero);}
+            case EARN_DEFENSE -> { return earnDefense(hero);}
+            case EARN_LUCK -> {return earnLuck(hero);}
+            case EARN_DAMAGE -> {return earnDamage(hero);}
+            case EARN_EXPERIENCE -> {return earnExperience(hero);}
+            case LOSS_LIFE_EARN_DEFENSE -> {return lossLifeEarnDefense(hero);}
+            case LOSS_LIFE_EARN_DAMAGE -> {return lossLifeEarnDamage(hero);}
+            case FIGHT -> {return fight(hero);}
+            case DROP_WEAPON -> {return dropWeapon(hero);}
         }
+
+        return null;
     }
 
-    public static void earnLife(Hero hero){
-        hero.setLife(hero.getLife() + (Dice.rollD20() + 4));
+    public static String earnLife(Hero hero){
+        Double value = (double) Dice.rollD20() + 4;
+        hero.setLife(hero.getLife() + value);
+        return hero.getName() +" earned " + value + " Life";
     }
 
-    public static void earnDefense(Hero hero){
-        hero.setDefense(hero.getDefense() + (Dice.rollD4()));
+    public static String earnDefense(Hero hero){
+        Double value = (double) Dice.rollD4();
+        hero.setDefense(hero.getDefense() + value);
+        return hero.getName() +" earned " + value + " Defense";
     }
 
-    public static void earnLuck(Hero hero){
-        hero.setLuck(hero.getLuck() + (Dice.rollD4())/2);
+    public static String earnLuck(Hero hero){
+        Double value = (double) (Dice.rollD4())/4;
+        hero.setLuck(hero.getLuck() + value);
+        return hero.getName() +" earned " + value + " Luck";
     }
 
-    public static void earnDamage(Hero hero){
-        hero.setDamage(hero.getDamage() + (Dice.rollD4()));
+    public static String earnDamage(Hero hero){
+        Double value = (double) Dice.rollD4();
+        hero.setDamage(hero.getDamage() + value);
+        return hero.getName() +" earned " + value + " Damage";
     }
 
-    public static void earnExperience(Hero hero){
-       hero.giveExp((double) (Dice.rollD20() + Dice.rollD20())*10);
+    public static String earnExperience(Hero hero){
+        Double value = (double) ((Dice.rollD20() + Dice.rollD20())*10);
+        hero.giveExp(value);
+        return hero.getName() +" earned " + value + " Experience";
     }
 
-    public static void lossLifeEarnDefense(Hero hero){
-        hero.setLife(hero.getLife() - Dice.roll3X_D4());
-        hero.setDefense(hero.getDefense() + Dice.rollD4());
+    public static String lossLifeEarnDefense(Hero hero){
+        Double lossValue = Double.valueOf(Dice.roll3X_D4());
+        Double earnValue = Double.valueOf(Dice.rollD4());
+        hero.setLife(hero.getLife() - lossValue );
+        hero.setDefense(hero.getDefense() + earnValue);
+        return hero.getName() +" earned " + earnValue + " Defense and losses " + lossValue;
     }
 
-    public static void lossLifeEarnDamage(Hero hero){
-        hero.setLife(hero.getLife() - (Dice.rollD4() + Dice.rollD4()));
-        hero.setDamage(hero.getDamage() + Dice.rollD4());
+    public static String lossLifeEarnDamage(Hero hero){
+        Double lossValue = Double.valueOf(Dice.roll3X_D4());
+        Double earnValue = Double.valueOf(Dice.rollD4());
+        hero.setLife(hero.getLife() - lossValue);
+        hero.setDamage(hero.getDamage() + earnValue);
+        return hero.getName() +" earned " + earnValue + " Damage and losses " + lossValue;
     }
 
-    public static void fight(Hero hero){
+    public static String fight(Hero hero){
         Fight.attack(hero);
+        return hero.getName() + " starts a Fight. Actual hero Life: " + hero.getLife();
     }
 
-    public static void dropWeapon(Hero hero){
-        Monster.dropWeapon(hero);
+    public static String dropWeapon(Hero hero){
+        Double oldHeroDamage = hero.getDamage();
+        Monster.dropWeaponTo(hero);
+        double earnedDamage = hero.getDamage() - oldHeroDamage;
+        if(oldHeroDamage >= hero.getDamage()){return hero.getName() + " got a weak Weapon";}
+        else{return hero.getName() + " got a good Weapon and got " + earnedDamage + " Damage";}
     }
 }
