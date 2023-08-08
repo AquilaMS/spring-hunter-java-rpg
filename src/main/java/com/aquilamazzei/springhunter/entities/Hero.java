@@ -46,10 +46,10 @@ public class Hero extends Peon implements Serializable {
 
     public void equipWeapon(Weapon weapon){
         ClassNames ownerClass = this.getHeroClass().getClassName();
-        Double luckBonus = Weapon.insertBonus(weapon, this);
+        Double luckBonus = Weapon.insertBonus(this);
         Double newWeaponDamage = (weapon.getDamage()) + (weapon.getDamage() * luckBonus);
 
-        Double specBonus = Weapon.insertBonus(weapon, this);
+        Double specBonus = Weapon.insertBonus(this);
 
         if(ownerClass == ClassNames.BARBARIAN && weapon.getType() == WeaponType.AXE) {newWeaponDamage += specBonus;}
         else if(ownerClass == ClassNames.SOLDIER && weapon.getType() == WeaponType.SWORD) {newWeaponDamage += specBonus;}

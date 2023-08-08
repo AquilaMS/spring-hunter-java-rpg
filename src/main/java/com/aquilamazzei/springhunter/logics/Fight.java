@@ -5,7 +5,7 @@ import com.aquilamazzei.springhunter.entities.Monster;
 
 public class Fight {
 
-    public static void attack(Hero attacker){
+    public static Hero attack(Hero attacker){
         Monster target = Monster.chooseMonster(attacker);
         System.out.println(target.getName());
         do {
@@ -30,5 +30,7 @@ public class Fight {
 
             System.out.println("monster life "+target.getLife());
             System.out.println("hero life " +attacker.getLife());
+
+        return attacker;
     }
 }

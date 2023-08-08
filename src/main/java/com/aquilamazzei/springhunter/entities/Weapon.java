@@ -64,7 +64,7 @@ public class Weapon {
         return list.get(0);
     }
 
-    public static Double insertBonus(Weapon weapon, Hero hero){
+    public static Double insertBonus(Hero hero){
         double bonus = 0.0;
         if (Dice.rollD20() <= hero.getLuck()){
             bonus = (hero.getLuck())/10;
