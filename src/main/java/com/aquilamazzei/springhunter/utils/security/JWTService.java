@@ -1,60 +1,49 @@
 package com.aquilamazzei.springhunter.utils.security;
 
 import com.aquilamazzei.springhunter.entities.Player;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-
+import java.time.ZoneOffset;
 
 @Service
 public class JWTService {
 
-    @Value("${security.jwt.expiration}")
-    private String expiration;
-
-    @Value("${security.jwt.assign-key}")
-    private String assignKey;
+    //@Value("${security.jwt.assign-key}")
+    private String secret = "aaaa";
 
     public String generateToken(Player player){
-        long expirationString = Long.valueOf(expiration);
-        LocalDateTime dateTimeExpiration = LocalDateTime.now().plusMinutes(expirationString);
-        Date date = Date.from(dateTimeExpiration.atZone(ZoneId.systemDefault()).toInstant());
-        return Jwts
-                .builder()
-                .setSubject(player.getUsername())
-                .setExpiration(date)
-                .signWith(SignatureAlgorithm.HS512, assignKey)
-                .compact();
-    }
-
-    private Claims getClaims(String token) throws ExpiredJwtException {
-        return Jwts
-                .parser()
-                .setSigningKey(assignKey)
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    public boolean validToken(String token){
         try {
-            Claims claims = getClaims(token);
-            Date dateExpiration = claims.getExpiration();
-            LocalDateTime localDateTime = dateExpiration.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-            return LocalDateTime.now().isAfter(localDateTime);
-        }catch (Exception e){
-            return false;
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            return JWT.create().withIssuer("spring-hunter")
+                    .withSubject(player.getUsername())
+                    .withExpiresAt(generateExpirationTime())
+                    .sign(algorithm);
+        }catch (JWTCreationException e){
+                throw new RuntimeException("JWT Creation Error", e);
         }
     }
 
-    public String getPlayerUsername(String token) throws ExpiredJwtException{
-        return getClaims(token).getSubject();
+    public String validateToken(String token){
+         try {
+             Algorithm algorithm = Algorithm.HMAC256(secret);
+             return JWT.require(algorithm)
+                     .withIssuer("spring-hunter")
+                     .build()
+                     .verify(token)
+                     .getSubject();
+         }catch (JWTVerificationException e){
+             return "";
+         }
+    }
+
+    private Instant generateExpirationTime(){
+        return LocalDateTime.now().plusMinutes(30).toInstant(ZoneOffset.of("-03:00"));
     }
 }

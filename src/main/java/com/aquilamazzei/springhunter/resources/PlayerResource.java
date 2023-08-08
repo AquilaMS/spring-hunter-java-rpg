@@ -1,9 +1,11 @@
 package com.aquilamazzei.springhunter.resources;
 
+import com.aquilamazzei.springhunter.dto.User.Auth.LoginResponseDTO;
 import com.aquilamazzei.springhunter.dto.User.CreateAccountDTO;
 import com.aquilamazzei.springhunter.dto.User.LoginDTO;
 import com.aquilamazzei.springhunter.entities.Player;
 import com.aquilamazzei.springhunter.repositories.PlayerRepository;
+import com.aquilamazzei.springhunter.utils.security.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,9 +25,11 @@ public class PlayerResource {
     @Autowired
     private PlayerRepository playerRepository;
 
-
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JWTService jwtService;
 
     @PostMapping("/signup")
     public ResponseEntity<Player> createNewPlayer(@RequestBody CreateAccountDTO account) {
@@ -34,18 +38,17 @@ public class PlayerResource {
             Player newPlayer = new Player(account.username(), encryptedPassword, account.email());
             this.playerRepository.save(newPlayer);
             return ResponseEntity.ok().build();
-
         }
         return ResponseEntity.badRequest().build();
 
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<Player> loginPlayer(@RequestBody LoginDTO account) {
+    public ResponseEntity loginPlayer(@RequestBody LoginDTO account) {
         Authentication usernamePassword = new UsernamePasswordAuthenticationToken(account.username(), account.password());
-        System.out.println(usernamePassword);
         Authentication auth = this.authenticationManager.authenticate(usernamePassword);
-        System.out.println(auth);
-        return ResponseEntity.ok().build();
+
+        String token = jwtService.generateToken((Player) auth.getPrincipal());
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 }
