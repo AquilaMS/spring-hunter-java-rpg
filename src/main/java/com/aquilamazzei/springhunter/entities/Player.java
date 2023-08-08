@@ -1,15 +1,18 @@
 package com.aquilamazzei.springhunter.entities;
 
+import com.aquilamazzei.springhunter.utils.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Data
 @Entity
@@ -24,15 +27,18 @@ public class Player implements Serializable, UserDetails {
     @NonNull private String password;
     @NonNull private String email;
 
-    public Player(@NonNull String username, @NonNull String password, @NonNull String email) {
+    private UserRole role;
+
+    public Player(@NonNull String username, @NonNull String password, @NonNull String email, UserRole role) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.role = role;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override

@@ -15,6 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.net.http.HttpHeaders;
+import java.security.SignatureSpi;
 import java.util.Enumeration;
 
 @Component
@@ -28,21 +29,20 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var token = this.recoverToken(request);
-        System.out.println("TOKEN: "+token);
-        if (token != null){
-            String subject = jwtService.validateToken(token);
+        if(token != null){
+            var login = jwtService.validateToken(token);
+            UserDetails user = playerRepository.findByUsername(login);
 
-            UserDetails user = playerRepository.findByUsername(subject);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(user, null);
+            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
     }
 
     private String recoverToken(HttpServletRequest request) {
-        String httpHeaders = String.valueOf(request.getHeaders("Authorization"));
-        if(httpHeaders == null) return null;
-        return httpHeaders;
+        var authHeader = request.getHeader("Authorization");
+        if(authHeader == null) return null;
+        return authHeader.replace("Bearer ", "");
     }
 
 

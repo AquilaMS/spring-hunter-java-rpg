@@ -5,6 +5,7 @@ import com.aquilamazzei.springhunter.dto.User.CreateAccountDTO;
 import com.aquilamazzei.springhunter.dto.User.LoginDTO;
 import com.aquilamazzei.springhunter.entities.Player;
 import com.aquilamazzei.springhunter.repositories.PlayerRepository;
+import com.aquilamazzei.springhunter.utils.enums.UserRole;
 import com.aquilamazzei.springhunter.utils.security.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class PlayerResource {
     public ResponseEntity<Player> createNewPlayer(@RequestBody CreateAccountDTO account) {
         if (playerRepository.findByUsernameOrEmail(account.username(), account.email()).isEmpty()) {
             String encryptedPassword = new BCryptPasswordEncoder().encode(account.password());
-            Player newPlayer = new Player(account.username(), encryptedPassword, account.email());
+            Player newPlayer = new Player(account.username(), encryptedPassword, account.email(), UserRole.USER);
             this.playerRepository.save(newPlayer);
             return ResponseEntity.ok().build();
         }
@@ -45,10 +46,16 @@ public class PlayerResource {
 
     @PostMapping("/signin")
     public ResponseEntity loginPlayer(@RequestBody LoginDTO account) {
-        Authentication usernamePassword = new UsernamePasswordAuthenticationToken(account.username(), account.password());
-        Authentication auth = this.authenticationManager.authenticate(usernamePassword);
+        var usernamePassword = new UsernamePasswordAuthenticationToken(account.username(), account.password());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        String token = jwtService.generateToken((Player) auth.getPrincipal());
+        var token = jwtService.generateToken((Player) auth.getPrincipal());
+
         return ResponseEntity.ok(new LoginResponseDTO(token));
+    }
+
+    @PostMapping("/teste")
+    public  ResponseEntity teste(){
+        return ResponseEntity.ok(new LoginResponseDTO("saww"));
     }
 }
