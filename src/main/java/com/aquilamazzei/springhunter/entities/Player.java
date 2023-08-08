@@ -3,15 +3,12 @@ package com.aquilamazzei.springhunter.entities;
 import com.aquilamazzei.springhunter.utils.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -26,6 +23,9 @@ public class Player implements Serializable, UserDetails {
     @NonNull private String username;
     @NonNull private String password;
     @NonNull private String email;
+
+    @OneToMany
+    List<Hero> heroesOwned;
 
     private UserRole role;
 
