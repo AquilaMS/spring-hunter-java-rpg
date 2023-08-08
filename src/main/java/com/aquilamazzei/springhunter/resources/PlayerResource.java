@@ -1,23 +1,51 @@
 package com.aquilamazzei.springhunter.resources;
 
-import com.aquilamazzei.springhunter.services.PlayerService;
-import com.aquilamazzei.springhunter.services.TypeService;
+import com.aquilamazzei.springhunter.dto.User.CreateAccountDTO;
+import com.aquilamazzei.springhunter.dto.User.LoginDTO;
+import com.aquilamazzei.springhunter.entities.Player;
+import com.aquilamazzei.springhunter.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class PlayerResource {
 
-    @Autowired
-    PlayerService playerService;
+    //TODO: Criar o throw
 
     @Autowired
-    TypeService typeService;
+    private PlayerRepository playerRepository;
 
-    @GetMapping("/inserir")
-    public void ttt(){
 
-        playerService.teste();
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @PostMapping("/signup")
+    public ResponseEntity<Player> createNewPlayer(@RequestBody CreateAccountDTO account) {
+        if (playerRepository.findByUsernameOrEmail(account.username(), account.email()).isEmpty()) {
+            String encryptedPassword = new BCryptPasswordEncoder().encode(account.password());
+            Player newPlayer = new Player(account.username(), encryptedPassword, account.email());
+            this.playerRepository.save(newPlayer);
+            return ResponseEntity.ok().build();
+
+        }
+        return ResponseEntity.badRequest().build();
+
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<Player> loginPlayer(@RequestBody LoginDTO account) {
+        Authentication usernamePassword = new UsernamePasswordAuthenticationToken(account.username(), account.password());
+        System.out.println(usernamePassword);
+        Authentication auth = this.authenticationManager.authenticate(usernamePassword);
+        System.out.println(auth);
+        return ResponseEntity.ok().build();
     }
 }

@@ -25,8 +25,7 @@ public class Choices {
     public Choices() {
 
 
-        List<ChoicesOptions> tempOptionsList = new ArrayList<>();
-        tempOptionsList.addAll(Arrays.asList(ChoicesOptions.values()));
+        List<ChoicesOptions> tempOptionsList = new ArrayList<>(Arrays.asList(ChoicesOptions.values()));
         generatedOption = tempOptionsList.get(Dice.rollCustom(tempOptionsList.size()));
 
         switch (generatedOption){
