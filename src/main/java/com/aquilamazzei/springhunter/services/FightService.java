@@ -17,7 +17,7 @@ import java.util.Objects;
 @Service
 public class FightService {
 
-    @Autowired
+
     private HeroService heroService;
 
     @Autowired

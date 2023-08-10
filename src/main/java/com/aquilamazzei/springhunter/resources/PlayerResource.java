@@ -48,9 +48,7 @@ public class PlayerResource {
     public ResponseEntity loginPlayer(@RequestBody LoginDTO account) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(account.username(), account.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
-
         var token = jwtService.generateToken((Player) auth.getPrincipal());
-
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 

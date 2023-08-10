@@ -1,5 +1,8 @@
 package com.aquilamazzei.springhunter.utils.enums;
 
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+
 public enum ChoicesOptions {
 
     EARN_LIFE,

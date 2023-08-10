@@ -39,7 +39,7 @@ public class HeroResource {
 
     @GetMapping("/onealive")
     public ResponseEntity getAllHeroesAliveByPlayer(@RequestBody OwnedByPlayerById index){
-        Hero gotHero = heroService.getHeroesAliveByPlayerById(index); //alive
+        Hero gotHero = heroService.getHeroesAliveByPlayerById(index);
         ResponseCreatedHero responseCreatedHero = new ResponseCreatedHero(
                 gotHero.getHeroProfession().getId(),
                 gotHero.getPeonName(),
