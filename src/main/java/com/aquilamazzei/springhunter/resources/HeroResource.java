@@ -2,10 +2,9 @@ package com.aquilamazzei.springhunter.resources;
 
 import com.aquilamazzei.springhunter.dto.Hero.CreateHeroDTO;
 import com.aquilamazzei.springhunter.dto.Hero.OwnedByPlayerById;
+import com.aquilamazzei.springhunter.dto.Hero.ResponseCreatedHero;
 import com.aquilamazzei.springhunter.entities.Hero;
-import com.aquilamazzei.springhunter.entities.HeroClass;
 import com.aquilamazzei.springhunter.services.HeroService;
-import com.aquilamazzei.springhunter.utils.enums.ClassNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,23 +19,39 @@ public class HeroResource {
     @Autowired
     HeroService heroService;
 
-    //TODO: ISSO AQUI
     @PostMapping("/create")
     public ResponseEntity createHero(@RequestBody CreateHeroDTO createHeroDTO){
-        Hero insertedHero = heroService.insertHero(createHeroDTO);
-        return ResponseEntity.ok(insertedHero);
+        ResponseCreatedHero insertedHero = heroService.insertHero(createHeroDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(insertedHero);
     }
 
-    @GetMapping("/allbyplayer")
+    @GetMapping("/all")
     public ResponseEntity getAllHeroesByPlayer(){
-        List<Hero> gotHeroes = heroService.getAllHeroesByLoggedPlayer();
-        return ResponseEntity.ok(gotHeroes);
+        List<ResponseCreatedHero> gotHeroes = heroService.getAllHeroesByLoggedPlayer();
+        return ResponseEntity.status(HttpStatus.OK).body(gotHeroes);
     }
 
-    @GetMapping("/getownedbyid")
-    public ResponseEntity getHeroOwnedByPlayerById(@RequestBody OwnedByPlayerById index){
-        Hero gotHero = heroService.getHeroOwnedByPlayerById(index);
-        return ResponseEntity.ok(gotHero);
+    @GetMapping("/allalive")
+    public ResponseEntity getAllHeroesAliveByPlayer(){
+        List<ResponseCreatedHero> gotHeroes = heroService.getAllHeroesAlive();
+        return ResponseEntity.status(HttpStatus.OK).body(gotHeroes);
+    }
+
+    @GetMapping("/onealive")
+    public ResponseEntity getAllHeroesAliveByPlayer(@RequestBody OwnedByPlayerById index){
+        Hero gotHero = heroService.getHeroesAliveByPlayerById(index); //alive
+        ResponseCreatedHero responseCreatedHero = new ResponseCreatedHero(
+                gotHero.getHeroProfession().getId(),
+                gotHero.getPeonName(),
+                gotHero.getLevel(),
+                gotHero.getHeroProfession().getClassName(),
+                gotHero.getDamage(),
+                gotHero.getDefense(),
+                gotHero.getLife(),
+                gotHero.getExperience(),
+                gotHero.getIsAlive()
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(responseCreatedHero);
     }
 
 }

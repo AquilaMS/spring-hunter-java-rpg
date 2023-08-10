@@ -1,5 +1,6 @@
 package com.aquilamazzei.springhunter.entities;
 
+import com.aquilamazzei.springhunter.repositories.HeroRepository;
 import com.aquilamazzei.springhunter.utils.enums.ClassNames;
 import com.aquilamazzei.springhunter.utils.enums.WeaponType;
 import jakarta.persistence.*;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
+
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -24,28 +26,28 @@ public class Hero extends Peon implements Serializable {
     private Player player;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private HeroClass heroClass;
+    private HeroProfession heroProfession;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Weapon weapon;
 
-    private String name;
     private Double luck;
+    private Boolean isAlive;
 
-    public Hero(Player player, HeroClass heroClass, String name) {
-        this.name = name;
+    public Hero(Player player, HeroProfession heroProfession, String name) {
+        isAlive = true;
         this.player = player;
-        this.heroClass = heroClass;
-        this.luck = heroClass.getLuck();
+        this.heroProfession = heroProfession;
+        this.luck = heroProfession.getLuck();
 
-        setLife(heroClass.getLife());
-        setDamage(heroClass.getDamage());
-        setDefense(heroClass.getDefense());
-        setName(name);
+        setPeonName(name);
+        setLife(heroProfession.getLife());
+        setDamage(heroProfession.getDamage());
+        setDefense(heroProfession.getDefense());
     }
 
     public void equipWeapon(Weapon weapon){
-        ClassNames ownerClass = this.getHeroClass().getClassName();
+        ClassNames ownerClass = this.getHeroProfession().getClassName();
         Double luckBonus = Weapon.insertBonus(this);
         Double newWeaponDamage = (weapon.getDamage()) + (weapon.getDamage() * luckBonus);
 
@@ -58,10 +60,6 @@ public class Hero extends Peon implements Serializable {
 
         if(ownerClass == ClassNames.SCRAPPER) {newWeaponDamage += specBonus * 0.8;}
         if(newWeaponDamage > getDamage()) {setDamage(newWeaponDamage); setWeapon(weapon);}
-
-        //TODO: checar se ha bug com
-
-        System.out.println("get weapon "+ getWeapon());
     }
 
     public void passLevel(){
@@ -70,7 +68,7 @@ public class Hero extends Peon implements Serializable {
         setDamage(getDamage() + 1.0);
         setDefense(getDefense() + 1.0);
 
-        ClassNames ownerClass = getHeroClass().getClassName();
+        ClassNames ownerClass = getHeroProfession().getClassName();
         switch (ownerClass){
             case BARBARIAN -> setLife(getLife() + (getLife() * 0.05));
             case SOLDIER -> setLife(getDamage() + (getDamage() * 0.05));

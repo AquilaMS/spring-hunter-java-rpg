@@ -1,36 +1,53 @@
 package com.aquilamazzei.springhunter.logics;
 
+import com.aquilamazzei.springhunter.dto.Fight.FightResult;
+import com.aquilamazzei.springhunter.dto.Hero.ResponseCreatedHero;
 import com.aquilamazzei.springhunter.entities.Hero;
 import com.aquilamazzei.springhunter.entities.Monster;
+import com.aquilamazzei.springhunter.entities.Weapon;
+import com.aquilamazzei.springhunter.services.HeroService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class Fight {
 
-    public static Hero attack(Hero attacker){
+    public FightResult attack(Hero attacker){
         Monster target = Monster.chooseMonster(attacker);
-        System.out.println(target.getName());
+        Weapon droppedWeapon = new Weapon();
+        System.out.println(target.getPeonName());
+        int playerDiceSum = 0;
+        int monsterDiceSum = 0;
         do {
             Integer rollResultToTarget = Dice.rollD20();
-            Double damageToTarget = (((attacker.getDamage()) * attacker.getLevel())/(target.getLevel() * target.getDefense())*(rollResultToTarget)) * 0.55;
+            playerDiceSum += rollResultToTarget;
+            Double damageToTarget = (((attacker.getDamage()) * attacker.getLevel())/(target.getLevel() * target.getDefense())*(rollResultToTarget)) * 0.6;
 
             Integer rollResultToAttacker = Dice.rollD20();
+            monsterDiceSum += rollResultToAttacker;
             Double damageToAttacker = (((target.getDamage()) * target.getLevel())/(attacker.getLevel() * attacker.getDefense())*(rollResultToAttacker)) * 0.5;
 
             target.setLife(target.getLife() - damageToTarget);
             attacker.setLife(attacker.getLife() - damageToAttacker);
 
             if (target.getLife() <= 0){
-                target.die();
-                Monster.dropWeaponTo(attacker);
-
+                droppedWeapon = Monster.dropWeaponTo(attacker);
                 attacker.giveExp((target.getDropExp()));
             }
-            if (attacker.getLife() <= 0) {attacker.die();}
+
 
         }while (target.getLife() > 0 && attacker.getLife()> 0);
 
-            System.out.println("monster life "+target.getLife());
-            System.out.println("hero life " +attacker.getLife());
-
-        return attacker;
+        ResponseCreatedHero responseEndHero = new ResponseCreatedHero(
+                attacker.getHeroProfession().getId(),
+                attacker.getPeonName(),
+                attacker.getLevel(),
+                attacker.getHeroProfession().getClassName(),
+                attacker.getDamage(),
+                attacker.getDefense(),
+                attacker.getLife(),
+                attacker.getExperience(),
+                attacker.getIsAlive()
+        );
+        FightResult result = new FightResult(responseEndHero, target, droppedWeapon, playerDiceSum, monsterDiceSum);
+        return result;
     }
 }

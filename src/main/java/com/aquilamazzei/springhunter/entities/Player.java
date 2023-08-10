@@ -20,16 +20,13 @@ public class Player implements Serializable, UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NonNull private String username;
-    @NonNull private String password;
-    @NonNull private String email;
-
-    @OneToMany
-    List<Hero> heroesOwned;
+    private String username;
+    private String password;
+    private String email;
 
     private UserRole role;
 
-    public Player(@NonNull String username, @NonNull String password, @NonNull String email, UserRole role) {
+    public Player(String username, String password, String email, UserRole role) {
         this.username = username;
         this.password = password;
         this.email = email;

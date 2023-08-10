@@ -24,7 +24,6 @@ public class Choices {
 
     public Choices() {
 
-
         List<ChoicesOptions> tempOptionsList = new ArrayList<>(Arrays.asList(ChoicesOptions.values()));
         generatedOption = tempOptionsList.get(Dice.rollCustom(tempOptionsList.size()));
 
@@ -87,59 +86,62 @@ public class Choices {
     public static String earnLife(Hero hero){
         Double value = (double) Dice.rollD20() + 4;
         hero.setLife(hero.getLife() + value);
-        return hero.getName() +" earned " + value + " Life";
+        return hero.getPeonName() +" earned " + value + " Life";
     }
 
     public static String earnDefense(Hero hero){
         Double value = (double) Dice.rollD4();
         hero.setDefense(hero.getDefense() + value);
-        return hero.getName() +" earned " + value + " Defense";
+        return hero.getPeonName() +" earned " + value + " Defense";
     }
 
     public static String earnLuck(Hero hero){
         Double value = (double) (Dice.rollD4())/4;
         hero.setLuck(hero.getLuck() + value);
-        return hero.getName() +" earned " + value + " Luck";
+        return hero.getPeonName() +" earned " + value + " Luck";
     }
 
     public static String earnDamage(Hero hero){
         Double value = (double) Dice.rollD4();
         hero.setDamage(hero.getDamage() + value);
-        return hero.getName() +" earned " + value + " Damage";
+        return hero.getPeonName() +" earned " + value + " Damage";
     }
 
     public static String earnExperience(Hero hero){
         Double value = (double) ((Dice.rollD20() + Dice.rollD20())*10);
         hero.giveExp(value);
-        return hero.getName() +" earned " + value + " Experience";
+        return hero.getPeonName() +" earned " + value + " Experience";
     }
 
     public static String lossLifeEarnDefense(Hero hero){
         Double lossValue = Double.valueOf(Dice.roll3X_D4());
         Double earnValue = Double.valueOf(Dice.rollD4());
-        hero.setLife(hero.getLife() - lossValue );
+        if(hero.getLife() - lossValue < 0) hero.setLife(hero.getLife() - lossValue);
+
         hero.setDefense(hero.getDefense() + earnValue);
-        return hero.getName() +" earned " + earnValue + " Defense and losses " + lossValue;
+        return hero.getPeonName() +" earned " + earnValue + " Defense and losses " + lossValue;
     }
 
     public static String lossLifeEarnDamage(Hero hero){
         Double lossValue = Double.valueOf(Dice.roll3X_D4());
         Double earnValue = Double.valueOf(Dice.rollD4());
-        hero.setLife(hero.getLife() - lossValue);
+        if(hero.getLife() - lossValue < 0) hero.setLife(hero.getLife() - lossValue);
+
         hero.setDamage(hero.getDamage() + earnValue);
-        return hero.getName() +" earned " + earnValue + " Damage and losses " + lossValue;
+        return hero.getPeonName() +" earned " + earnValue + " Damage and losses " + lossValue;
     }
 
     public static String fight(Hero hero){
-        Fight.attack(hero);
-        return hero.getName() + " starts a Fight. Actual hero Life: " + hero.getLife();
+        Fight fight = new Fight();
+        fight.attack(hero);
+        return hero.getPeonName() + " starts a Fight. Actual hero Life: " + hero.getLife();
     }
 
     public static String dropWeapon(Hero hero){
         Double oldHeroDamage = hero.getDamage();
         Monster.dropWeaponTo(hero);
         double earnedDamage = hero.getDamage() - oldHeroDamage;
-        if(oldHeroDamage >= hero.getDamage()){return hero.getName() + " got a weak Weapon";}
-        else{return hero.getName() + " got a good Weapon and got " + earnedDamage + " Damage";}
+        if(oldHeroDamage >= hero.getDamage()){return hero.getPeonName() + " got a weak Weapon";}
+        else{return hero.getPeonName() + " got a good Weapon and got " + earnedDamage + " Damage";}
     }
 }

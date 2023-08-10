@@ -22,12 +22,11 @@ public class Monster extends Peon implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NonNull
     private Double dropExp;
 
     public Monster(String name, double life, double defense, int level, double damage, double dropExp) {
         super();
-        setName(name);
+        setPeonName(name);
         setLife(life);
         setDefense(defense);
         setLevel(level);
@@ -35,7 +34,7 @@ public class Monster extends Peon implements Serializable{
         setDropExp(dropExp);
     }
 
-    public static void dropWeaponTo(Hero hero) {
+    public static Weapon dropWeaponTo(Hero hero) {
         int diceType = Dice.rollCustom(4);
         int indexItem = 0;
 
@@ -44,9 +43,13 @@ public class Monster extends Peon implements Serializable{
         int diceChooseItem = Dice.rollD20() + Dice.rollD20();
         if (diceChooseItem == 40) {
             indexItem = arsenal.weaponsList.get(diceType).size() - 1;
-            hero.equipWeapon(arsenal.weaponsList.get(diceType).get(indexItem));
+            Weapon droppedWeapon = arsenal.weaponsList.get(diceType).get(indexItem);
+            hero.equipWeapon(droppedWeapon);
+            return droppedWeapon;
         }else {
-            hero.equipWeapon(Weapon.selectItemFromList(arsenal.weaponsList.get(diceType), Dice.rollDouble()));
+            Weapon droppedWeapon = Weapon.selectItemFromList(arsenal.weaponsList.get(diceType), Dice.rollDouble());
+            hero.equipWeapon(droppedWeapon);
+            return droppedWeapon;
         }
     }
 
@@ -70,8 +73,13 @@ public class Monster extends Peon implements Serializable{
                 tempMonsterList.add(creature);
             }
         }
+        Monster gotMonster;
 
-        Monster gotMonster = tempMonsterList.get(random.nextInt(tempMonsterList.size()));
+        if (tempMonsterList.size() != 0){
+            gotMonster = tempMonsterList.get(random.nextInt(tempMonsterList.size()));
+        }else{
+            gotMonster = monsters.monstersList.get(monsters.monstersList.size() - 1);
+        }
 
         return updateMonsterStatsByLevel(gotMonster, hero.getLevel());
     }

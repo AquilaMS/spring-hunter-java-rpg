@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PlayerResource {
 
     //TODO: Criar o throw
-
+    //TODO: Escolhas
     @Autowired
     private PlayerRepository playerRepository;
 

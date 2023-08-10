@@ -2,20 +2,19 @@ package com.aquilamazzei.springhunter.services;
 
 import com.aquilamazzei.springhunter.dto.Hero.CreateHeroDTO;
 import com.aquilamazzei.springhunter.dto.Hero.OwnedByPlayerById;
+import com.aquilamazzei.springhunter.dto.Hero.ResponseCreatedHero;
 import com.aquilamazzei.springhunter.entities.Hero;
-import com.aquilamazzei.springhunter.entities.HeroClass;
+import com.aquilamazzei.springhunter.entities.HeroProfession;
 import com.aquilamazzei.springhunter.entities.Player;
 import com.aquilamazzei.springhunter.repositories.HeroRepository;
-import com.aquilamazzei.springhunter.repositories.PlayerRepository;
 import com.aquilamazzei.springhunter.utils.security.AuthorizationService;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class HeroService {
@@ -26,32 +25,101 @@ public class HeroService {
     @Autowired
     private AuthorizationService authorizationService;
 
-    public Hero insertHero(CreateHeroDTO createHeroDTO){
+    public ResponseCreatedHero insertHero(CreateHeroDTO createHeroDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Player loggedPlayer = (Player) authorizationService.loadUserByUsername(authentication.getName());
-        HeroClass newHeroClass = new HeroClass(createHeroDTO.className());
-        Hero newHero = new Hero(loggedPlayer, newHeroClass, createHeroDTO.characterName());
+        HeroProfession newHeroProfession = new HeroProfession(createHeroDTO.className());
+        Hero newHero = heroRepository.save(new Hero(loggedPlayer, newHeroProfession, createHeroDTO.characterName()));
 
-        heroRepository.save(newHero);
-        return newHero;
+        ResponseCreatedHero responseHero = new ResponseCreatedHero(
+                newHero.getHeroProfession().getId(),
+                newHero.getPeonName(),
+                newHero.getLevel(),
+                newHero.getHeroProfession().getClassName(),
+                newHero.getDamage(),
+                newHero.getDefense(),
+                newHero.getLife(),
+                newHero.getExperience(),
+                newHero.getIsAlive()
+        );
+
+        return responseHero;
     }
 
-    public List<Hero> getAllHeroesByLoggedPlayer(){
+    public List<ResponseCreatedHero> getAllHeroesAlive() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Player loggedPlayer = (Player) authorizationService.loadUserByUsername(authentication.getName());
-        return heroRepository.findAllByPlayer(loggedPlayer);
+        List<Hero> heroesGot = heroRepository.findAllByPlayer(loggedPlayer);
+        List<ResponseCreatedHero> responseHero = new ArrayList<>();
+
+        for (Hero hero : heroesGot) {
+            if (hero.getIsAlive()) {
+                responseHero.add(new ResponseCreatedHero(
+                        hero.getHeroProfession().getId(),
+                        hero.getPeonName(),
+                        hero.getLevel(),
+                        hero.getHeroProfession().getClassName(),
+                        hero.getDamage(),
+                        hero.getDefense(),
+                        hero.getLife(),
+                        hero.getExperience(),
+                        true
+                ));
+            }
+        }
+
+        return responseHero;
     }
 
-    public Hero getHeroOwnedByPlayerById(OwnedByPlayerById id){
+    public List<ResponseCreatedHero> getAllHeroesByLoggedPlayer() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Player loggedPlayer = (Player) authorizationService.loadUserByUsername(authentication.getName());
         List<Hero> heroesGot = heroRepository.findAllByPlayer(loggedPlayer);
 
-        return heroesGot.get(id.index());
+        List<ResponseCreatedHero> responseHero = new ArrayList<>();
+
+        for (Hero hero : heroesGot) {
+            responseHero.add(new ResponseCreatedHero(
+                    hero.getHeroProfession().getId(),
+                    hero.getPeonName(),
+                    hero.getLevel(),
+                    hero.getHeroProfession().getClassName(),
+                    hero.getDamage(),
+                    hero.getDefense(),
+                    hero.getLife(),
+                    hero.getExperience(),
+                    hero.getIsAlive()
+            ));
+
+        }
+
+        return responseHero;
     }
 
-    public Hero updateHero(Hero newHero){
+    public Hero getHeroesAliveByPlayerById(OwnedByPlayerById id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Player loggedPlayer = (Player) authorizationService.loadUserByUsername(authentication.getName());
+
+        List<Hero> heroesGot = heroRepository.findAllByPlayer(loggedPlayer);
+        List<Hero> heroesResponse = new ArrayList<>();
+
+        for (Hero hero : heroesGot) {
+            if (hero.getIsAlive()) {
+                heroesResponse.add(hero);
+            }
+        }
+
+        return heroesResponse.get(id.index());
+    }
+
+    public Hero updateHero(Hero newHero) {
+        System.out.println(newHero);
         return heroRepository.save(newHero);
+    }
+
+    public void die(Hero hero) {
+        hero.setIsAlive(false);
+        heroRepository.save(hero);
     }
 }

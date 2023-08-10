@@ -5,12 +5,14 @@ import com.aquilamazzei.springhunter.utils.enums.WeaponType;
 import com.aquilamazzei.springhunter.logics.Dice;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.List;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class Weapon {
 
     @Id
@@ -18,7 +20,7 @@ public class Weapon {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @NonNull private WeaponType type;
+    private WeaponType type;
 
     private String name;
     private Double damage;

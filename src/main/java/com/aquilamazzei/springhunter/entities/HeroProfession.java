@@ -1,17 +1,14 @@
 package com.aquilamazzei.springhunter.entities;
 
-import com.aquilamazzei.springhunter.utils.Choices;
-import com.aquilamazzei.springhunter.utils.enums.ChoicesOptions;
 import com.aquilamazzei.springhunter.utils.enums.ClassNames;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Data
 @Entity
 @NoArgsConstructor
-public class HeroClass {
+public class HeroProfession {
     /*
     *  heroClassesList.add(new HeroClass(ClassNames.BARBARIAN,150.0,3.0, 2.0, 1.0));
         heroClassesList.add(new HeroClass(ClassNames.SOLDIER,120.0,4.0, 4.0, 1.0));
@@ -22,7 +19,7 @@ public class HeroClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     private ClassNames className;
     private Double life;
@@ -30,38 +27,38 @@ public class HeroClass {
     private Double defense;
     private Double luck;
 
-    public HeroClass(ClassNames className) {
+    public HeroProfession(ClassNames className) {
         this.className = className;
 
         switch (className){
             case BARBARIAN -> {
-                this.life = 150.0;
-                this.damage = 3.0;
-                this.defense = 2.0;
+                this.life = 170.0;
+                this.damage = 4.0;
+                this.defense = 3.0;
                 this.luck = 1.0;
             }
             case SOLDIER -> {
-                this.life = 120.0;
-                this.damage = 4.0;
-                this.defense = 4.0;
+                this.life = 140.0;
+                this.damage = 5.0;
+                this.defense = 5.0;
                 this.luck = 1.0;
             }
             case BASTION -> {
-                this.life = 110.0;
-                this.damage = 3.0;
-                this.defense = 7.0;
+                this.life = 130.0;
+                this.damage = 4.0;
+                this.defense = 8.0;
                 this.luck = 1.0;
             }
             case TREASURE_HUNTER -> {
-                this.life = 90.0;
-                this.damage = 3.0;
-                this.defense = 4.0;
+                this.life = 110.0;
+                this.damage = 4.0;
+                this.defense = 3.0;
                 this.luck = 3.0;
             }
             case SCRAPPER -> {
-                this.life = 110.0;
-                this.damage = 3.0;
-                this.defense = 3.0;
+                this.life = 130.0;
+                this.damage = 4.0;
+                this.defense = 4.0;
                 this.luck = 2.0;}
         }
     }

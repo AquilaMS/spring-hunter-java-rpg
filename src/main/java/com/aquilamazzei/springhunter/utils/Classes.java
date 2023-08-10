@@ -1,14 +1,13 @@
 package com.aquilamazzei.springhunter.utils;
 
-import com.aquilamazzei.springhunter.utils.enums.ClassNames;
-import com.aquilamazzei.springhunter.entities.HeroClass;
+import com.aquilamazzei.springhunter.entities.HeroProfession;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Classes {
 
-    public List<HeroClass> heroClassesList = new ArrayList<>();
+    public List<HeroProfession> heroClassesList = new ArrayList<>();
 
     public Classes(){/*
         heroClassesList.add(new HeroClass(ClassNames.BARBARIAN,150.0,3.0, 2.0, 1.0));
