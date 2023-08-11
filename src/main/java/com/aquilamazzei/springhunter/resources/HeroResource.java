@@ -49,7 +49,8 @@ public class HeroResource {
                 gotHero.getDefense(),
                 gotHero.getLife(),
                 gotHero.getExperience(),
-                gotHero.getIsAlive()
+                gotHero.getIsAlive(),
+                gotHero.getGold()
         );
         return ResponseEntity.status(HttpStatus.OK).body(responseCreatedHero);
     }

@@ -33,9 +33,12 @@ public class Hero extends Peon implements Serializable {
 
     private Double luck;
     private Boolean isAlive;
+    private Integer gold;
 
     public Hero(Player player, HeroProfession heroProfession, String name) {
         isAlive = true;
+        gold = 0;
+
         this.player = player;
         this.heroProfession = heroProfession;
         this.luck = heroProfession.getLuck();

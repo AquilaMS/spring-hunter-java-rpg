@@ -34,8 +34,8 @@ public class FightResource {
     @PostMapping
     public ResponseEntity fight(@RequestBody OwnedByPlayerById id){
         Hero attacker = heroService.getHeroesAliveByPlayerById(id);
-        ResponseEntity fightResult2 = fightService.fight(attacker);
-        Fight fight = new Fight();
-        return ResponseEntity.ok(fightResult2);
+        ResponseEntity fightResult = fightService.fight(attacker);
+
+        return ResponseEntity.ok(fightResult.getBody());
     }
 }

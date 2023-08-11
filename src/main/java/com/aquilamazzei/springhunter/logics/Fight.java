@@ -6,6 +6,7 @@ import com.aquilamazzei.springhunter.entities.Hero;
 import com.aquilamazzei.springhunter.entities.Monster;
 import com.aquilamazzei.springhunter.entities.Weapon;
 import com.aquilamazzei.springhunter.services.HeroService;
+import com.aquilamazzei.springhunter.utils.enums.ClassNames;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class Fight {
@@ -29,6 +30,10 @@ public class Fight {
             attacker.setLife(attacker.getLife() - damageToAttacker);
 
             if (target.getLife() <= 0){
+                if(attacker.getHeroProfession().getClassName().equals(ClassNames.TREASURE_HUNTER)){
+                    attacker.setGold(attacker.getGold() + 15);
+                }
+                attacker.setGold(attacker.getGold() + 10);
                 droppedWeapon = Monster.dropWeaponTo(attacker);
                 attacker.giveExp((target.getDropExp()));
             }
@@ -45,7 +50,8 @@ public class Fight {
                 attacker.getDefense(),
                 attacker.getLife(),
                 attacker.getExperience(),
-                attacker.getIsAlive()
+                attacker.getIsAlive(),
+                attacker.getGold()
         );
         FightResult result = new FightResult(responseEndHero, target, droppedWeapon, playerDiceSum, monsterDiceSum);
         return result;

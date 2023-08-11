@@ -17,7 +17,7 @@ import java.util.Objects;
 @Service
 public class FightService {
 
-
+    @Autowired
     private HeroService heroService;
 
     @Autowired
@@ -35,7 +35,6 @@ public class FightService {
         attacker.setWeapon(fightResult.weapon());
         attacker.setDefense(fightResult.hero().defense());
 
-        //TODO: COLCOAR ISSO NO SERVICE
         if (fightResult.hero().life() > 0 && Objects.equals(fightResult.monster().getPeonName(), "The Deimos")){
             heroService.updateHero(attacker);
             GreatHall greatHall = new GreatHall(attacker);
@@ -44,7 +43,6 @@ public class FightService {
         }
 
         if(fightResult.hero().life() <= 0){
-            System.out.println("teste2 id: " + attacker.getHeroProfession().getId());
             heroService.die(attacker);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseToPlayer("The Death found you... This dimensions deserves The True Hero. Your name is now in the Oblivion and your scars is worthless"));
         }else {

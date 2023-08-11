@@ -41,7 +41,8 @@ public class HeroService {
                 newHero.getDefense(),
                 newHero.getLife(),
                 newHero.getExperience(),
-                newHero.getIsAlive()
+                newHero.getIsAlive(),
+                newHero.getGold()
         );
 
         return responseHero;
@@ -64,7 +65,8 @@ public class HeroService {
                         hero.getDefense(),
                         hero.getLife(),
                         hero.getExperience(),
-                        true
+                        true,
+                        hero.getGold()
                 ));
             }
         }
@@ -89,7 +91,8 @@ public class HeroService {
                     hero.getDefense(),
                     hero.getLife(),
                     hero.getExperience(),
-                    hero.getIsAlive()
+                    hero.getIsAlive(),
+                    hero.getGold()
             ));
 
         }

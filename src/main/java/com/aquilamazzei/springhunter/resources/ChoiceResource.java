@@ -1,6 +1,7 @@
 package com.aquilamazzei.springhunter.resources;
 
 import com.aquilamazzei.springhunter.dto.Choice.ChosenOption;
+import com.aquilamazzei.springhunter.dto.SimpleMessage;
 import com.aquilamazzei.springhunter.entities.Hero;
 import com.aquilamazzei.springhunter.services.HeroService;
 import com.aquilamazzei.springhunter.utils.Choices;
@@ -19,9 +20,6 @@ public class ChoiceResource {
     @Autowired
     private HeroService heroService;
 
-    public void updateHero(Hero hero){
-        heroService.updateHero(hero);
-    }
 
     @GetMapping
     public ResponseEntity generateChoices() {
@@ -43,11 +41,18 @@ public class ChoiceResource {
 
     @PostMapping
     public ResponseEntity chooseOption(@RequestBody ChosenOption chosenOption){
-
         Hero hero = heroService.getHeroesAliveByPlayerById(chosenOption.index());
-        Choices choices = new Choices();
-        return ResponseEntity.ok(choices.chosenOption(hero,chosenOption.choices().getGeneratedOption(), heroService));
+        if (hero.getGold() >= 50){
+            Choices choices = new Choices();
+            SimpleMessage message = new SimpleMessage(choices.chosenOption(hero,chosenOption.choices().getGeneratedOption(), heroService));
+            hero.setGold(hero.getGold() - 50);
+            heroService.updateHero(hero);
 
+            return ResponseEntity.ok(message);
+        }else {
+            SimpleMessage message = new SimpleMessage("Not Enough Gold");
+            return ResponseEntity.ok(message);
+        }
 
         /*
          * {
