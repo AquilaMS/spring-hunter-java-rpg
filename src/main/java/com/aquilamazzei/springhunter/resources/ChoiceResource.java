@@ -1,6 +1,7 @@
 package com.aquilamazzei.springhunter.resources;
 
 import com.aquilamazzei.springhunter.dto.Choice.ChosenOption;
+import com.aquilamazzei.springhunter.dto.Hero.OwnedByPlayerById;
 import com.aquilamazzei.springhunter.dto.SimpleMessage;
 import com.aquilamazzei.springhunter.entities.Hero;
 import com.aquilamazzei.springhunter.services.HeroService;
@@ -22,35 +23,43 @@ public class ChoiceResource {
 
 
     @GetMapping
-    public ResponseEntity generateChoices() {
+    public ResponseEntity generateChoices(@RequestBody OwnedByPlayerById index) {
+        Hero gotHero = heroService.getHeroesAliveByPlayerById(index);
+        if (gotHero.getGold() >= 50) {
 
-        List<Choices> choicesList = new ArrayList<>();
-        List<Integer> tempOrdinalList = new ArrayList<>();
+            List<Choices> choicesList = new ArrayList<>();
+            List<Integer> tempOrdinalList = new ArrayList<>();
 
-        while (choicesList.size() < 3) {
-            Choices choices = new Choices();
-            int newOrdinal = choices.generatedOption.ordinal();
+            while (choicesList.size() < 3) {
+                Choices choices = new Choices();
+                int newOrdinal = choices.generatedOption.ordinal();
 
-            if (!tempOrdinalList.contains(newOrdinal)) {
-                tempOrdinalList.add(newOrdinal);
-                choicesList.add(choices);
+                if (!tempOrdinalList.contains(newOrdinal)) {
+                    tempOrdinalList.add(newOrdinal);
+                    choicesList.add(choices);
+                }
             }
+            gotHero.setGold(gotHero.getGold() - 50);
+            heroService.updateHero(gotHero);
+            return ResponseEntity.status(HttpStatus.OK).body(choicesList);
+        }else {
+            SimpleMessage message = new SimpleMessage("Not enough Gold to roll choices");
+            return ResponseEntity.ok(message);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(choicesList);
     }
 
     @PostMapping
-    public ResponseEntity chooseOption(@RequestBody ChosenOption chosenOption){
+    public ResponseEntity chooseOption(@RequestBody ChosenOption chosenOption) {
         Hero hero = heroService.getHeroesAliveByPlayerById(chosenOption.index());
-        if (hero.getGold() >= 50){
+        if (hero.getGold() >= 50) {
             Choices choices = new Choices();
-            SimpleMessage message = new SimpleMessage(choices.chosenOption(hero,chosenOption.choices().getGeneratedOption(), heroService));
+            SimpleMessage message = new SimpleMessage(choices.chosenOption(hero, chosenOption.choices().getGeneratedOption(), heroService));
             hero.setGold(hero.getGold() - 50);
             heroService.updateHero(hero);
 
             return ResponseEntity.ok(message);
-        }else {
-            SimpleMessage message = new SimpleMessage("Not Enough Gold");
+        } else {
+            SimpleMessage message = new SimpleMessage("Not Enough Gold to buy choice");
             return ResponseEntity.ok(message);
         }
 
