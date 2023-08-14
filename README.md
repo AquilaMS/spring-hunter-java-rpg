@@ -9,6 +9,9 @@ A ideia principal seria um jogo baseado em 2 opções de escolhas mais amplas: L
 
 Foi utilizado o Spring Boot para o desenvolvimento, assim como suas ferramentas de segurança, Spring Security, para a autenticação e autorização às rotas da aplicação. MySQL como banco de dados e a implementação Hibernate.
 
+## EXEMPLO DE UI
+![Inserir um título](https://github.com/AquilaMS/spring-hunter-java-rpg/assets/26696249/9c85d4be-7895-4c72-a7d4-17fb7ca578f6)
+
 ## MODELAGEM FINAL DA APLICACAO_
 A modelagem original das Entities mudou com relação ao que era originalmente, mas a base do projeto permaneceu. A versão final da modelagem foi a seguinte:
 
