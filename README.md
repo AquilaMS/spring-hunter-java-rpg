@@ -1,6 +1,6 @@
 # Spring Hunter - Java RPG
+![Design sem nome (7)](https://github.com/AquilaMS/spring-hunter-java-rpg/assets/26696249/e9d3d9f3-4bcd-4e2f-9c6c-c188ba8f48ae)
 
-![Spring Hunter](https://github.com/AquilaMS/spring-hunter-java-rpg/assets/26696249/8a14d5e3-354a-4eae-af27-42620d163bd0)
 
 ## SOBRE O PROJETO_
 A ideia principal seria um jogo baseado em 2 opções de escolhas mais amplas: Lutar e Escolher. Lutar teria um risco alto, principalmente em niveis mais altos, mas com possibilidades de aumentar consideravelmente o poder do personagem. E, Escolher, gastaria o recurso Gold para sortear e ativar uma dentre 3 opções geradas. Manejando os riscos e os recursos do personagem, o personagem que derrotasse o último monstro teria seu nome registrado de forma pública, assim como seus status.
