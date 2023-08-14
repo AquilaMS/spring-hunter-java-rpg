@@ -51,7 +51,8 @@ public class Fight {
                 attacker.getLife(),
                 attacker.getExperience(),
                 attacker.getIsAlive(),
-                attacker.getGold()
+                attacker.getGold(),
+                attacker.getWeapon()
         );
         FightResult result = new FightResult(responseEndHero, target, droppedWeapon, playerDiceSum, monsterDiceSum);
         return result;

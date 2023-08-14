@@ -3,9 +3,11 @@ package com.aquilamazzei.springhunter.services;
 import com.aquilamazzei.springhunter.dto.Hero.CreateHeroDTO;
 import com.aquilamazzei.springhunter.dto.Hero.OwnedByPlayerById;
 import com.aquilamazzei.springhunter.dto.Hero.ResponseCreatedHero;
+import com.aquilamazzei.springhunter.entities.GreatHall;
 import com.aquilamazzei.springhunter.entities.Hero;
 import com.aquilamazzei.springhunter.entities.HeroProfession;
 import com.aquilamazzei.springhunter.entities.Player;
+import com.aquilamazzei.springhunter.repositories.GreatHallRepository;
 import com.aquilamazzei.springhunter.repositories.HeroRepository;
 import com.aquilamazzei.springhunter.utils.security.AuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class HeroService {
 
     @Autowired
     HeroRepository heroRepository;
+
+    @Autowired
+    GreatHallRepository greatHallRepository;
 
     @Autowired
     private AuthorizationService authorizationService;
@@ -42,13 +47,15 @@ public class HeroService {
                 newHero.getLife(),
                 newHero.getExperience(),
                 newHero.getIsAlive(),
-                newHero.getGold()
+                newHero.getGold(),
+                newHero.getWeapon()
         );
 
         return responseHero;
     }
 
-    public List<ResponseCreatedHero> getAllHeroesAlive() {
+
+    public List<ResponseCreatedHero> getAllHeroesAliveFiltered() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Player loggedPlayer = (Player) authorizationService.loadUserByUsername(authentication.getName());
         List<Hero> heroesGot = heroRepository.findAllByPlayer(loggedPlayer);
@@ -66,7 +73,8 @@ public class HeroService {
                         hero.getLife(),
                         hero.getExperience(),
                         true,
-                        hero.getGold()
+                        hero.getGold(),
+                        hero.getWeapon()
                 ));
             }
         }
@@ -74,7 +82,7 @@ public class HeroService {
         return responseHero;
     }
 
-    public List<ResponseCreatedHero> getAllHeroesByLoggedPlayer() {
+    public List<ResponseCreatedHero> getAllHeroesByLoggedPlayerFiltered() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Player loggedPlayer = (Player) authorizationService.loadUserByUsername(authentication.getName());
         List<Hero> heroesGot = heroRepository.findAllByPlayer(loggedPlayer);
@@ -92,7 +100,8 @@ public class HeroService {
                     hero.getLife(),
                     hero.getExperience(),
                     hero.getIsAlive(),
-                    hero.getGold()
+                    hero.getGold(),
+                    hero.getWeapon()
             ));
 
         }
@@ -116,6 +125,14 @@ public class HeroService {
         return heroesResponse.get(id.index());
     }
 
+    public List<Hero> getHeroesByPlayerNonFiltered() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Player loggedPlayer = (Player) authorizationService.loadUserByUsername(authentication.getName());
+
+        return heroRepository.findAllByPlayer(loggedPlayer);
+    }
+
+
     public Hero updateHero(Hero newHero) {
         System.out.println(newHero);
         return heroRepository.save(newHero);
@@ -124,5 +141,9 @@ public class HeroService {
     public void die(Hero hero) {
         hero.setIsAlive(false);
         heroRepository.save(hero);
+    }
+
+    public void delete(Hero hero){
+        heroRepository.delete(hero);
     }
 }

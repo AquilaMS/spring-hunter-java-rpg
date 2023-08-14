@@ -5,10 +5,12 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @Entity
 @NoArgsConstructor
-public class HeroProfession {
+public class HeroProfession implements Serializable {
     /*
     *  heroClassesList.add(new HeroClass(ClassNames.BARBARIAN,150.0,3.0, 2.0, 1.0));
         heroClassesList.add(new HeroClass(ClassNames.SOLDIER,120.0,4.0, 4.0, 1.0));

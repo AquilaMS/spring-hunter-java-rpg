@@ -39,6 +39,7 @@ public class FightService {
             heroService.updateHero(attacker);
             GreatHall greatHall = new GreatHall(attacker);
             greatHallRepository.save(greatHall);
+            heroService.die(attacker);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseToPlayer("You killed High Overlord Deimos, the Mallyx's general in this dimension. Your name and scars is now on the Great Hall's Stone Table!"));
         }
 

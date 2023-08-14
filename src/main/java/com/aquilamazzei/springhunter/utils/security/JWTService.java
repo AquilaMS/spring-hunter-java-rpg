@@ -15,8 +15,8 @@ import java.time.ZoneOffset;
 @Service
 public class JWTService {
 
-    //@Value("${security.jwt.assign-key}")
-    private String secret = "aaaa";
+    @Value("${security.jwt.assign-key}")
+    private String secret;
 
     public String generateToken(Player player){
         try {
@@ -39,7 +39,7 @@ public class JWTService {
                      .verify(token)
                      .getSubject();
          }catch (JWTVerificationException e){
-             return "";
+             return e.toString();
          }
     }
 

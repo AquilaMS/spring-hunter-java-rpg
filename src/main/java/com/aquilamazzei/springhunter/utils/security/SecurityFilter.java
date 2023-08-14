@@ -23,6 +23,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
     JWTService jwtService;
+
     @Autowired
     PlayerRepository playerRepository;
 
@@ -30,17 +31,16 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var token = this.recoverToken(request);
         if(token != null){
-            var login = jwtService.validateToken(token);
+            String login = jwtService.validateToken(token);
             UserDetails user = playerRepository.findByUsername(login);
-
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
     }
 
     private String recoverToken(HttpServletRequest request) {
-        var authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader("Authorization");
         if(authHeader == null) return null;
         return authHeader.replace("Bearer ", "");
     }

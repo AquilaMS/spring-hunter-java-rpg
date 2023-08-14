@@ -21,8 +21,7 @@ public class ChoiceResource {
     @Autowired
     private HeroService heroService;
 
-
-    @GetMapping
+    @GetMapping("/generatechoice")
     public ResponseEntity generateChoices(@RequestBody OwnedByPlayerById index) {
         Hero gotHero = heroService.getHeroesAliveByPlayerById(index);
         if (gotHero.getGold() >= 50) {
@@ -48,7 +47,7 @@ public class ChoiceResource {
         }
     }
 
-    @PostMapping
+    @PostMapping("/choice")
     public ResponseEntity chooseOption(@RequestBody ChosenOption chosenOption) {
         Hero hero = heroService.getHeroesAliveByPlayerById(chosenOption.index());
         if (hero.getGold() >= 50) {
@@ -60,6 +59,7 @@ public class ChoiceResource {
             return ResponseEntity.ok(message);
         } else {
             SimpleMessage message = new SimpleMessage("Not Enough Gold to buy choice");
+
             return ResponseEntity.ok(message);
         }
 

@@ -8,12 +8,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @Entity
 @NoArgsConstructor
-public class Weapon {
+public class Weapon implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -21,8 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PlayerResource {
 
-    //TODO: Criar o throw
-    //TODO: Escolhas
+
     @Autowired
     private PlayerRepository playerRepository;
 
@@ -51,9 +50,5 @@ public class PlayerResource {
         var token = jwtService.generateToken((Player) auth.getPrincipal());
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
-
-    @PostMapping("/teste")
-    public  ResponseEntity teste(){
-        return ResponseEntity.ok(new LoginResponseDTO("saww"));
-    }
+    
 }
